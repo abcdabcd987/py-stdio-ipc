@@ -1,3 +1,9 @@
+*.log
+result.json
+sample_ai
+sample_ai_re
+sample_ai_tle
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
