@@ -16,39 +16,47 @@ class ChildProcess():
         self.thread.start()
 
     def _message_thread(self):
-        while True:
-            op = self.qmain.get()
-            if op['command'] == 'exit':
-                break
+        try:
+            while True:
+                op = self.qmain.get()
+                if op['command'] == 'exit':
+                    break
 
-            elif op['command'] == 'send':
-                content = op['content']
-                self.child.stdin.write(content)
-                self.child.stdin.flush()
-                self.stdin.write(content)
-                self.qthread.put('finish')
+                elif op['command'] == 'send':
+                    content = op['content']
+                    self.child.stdin.write(content)
+                    self.child.stdin.flush()
+                    self.stdin.write(content)
+                    self.qthread.put('finish')
 
-            elif op['command'] == 'recv':
-                content = ''
-                while not content.endswith('END\n'):
-                    chunk = self.child.stdout.readline()
-                    if not chunk:
-                        break
-                    content += chunk
-                content = content[:-4]
-                self.stdout.write(content)
-                self.qthread.put(content)
+                elif op['command'] == 'recv':
+                    content = ''
+                    while not content.endswith('END\n'):
+                        chunk = self.child.stdout.readline()
+                        if not chunk:
+                            break
+                        content += chunk
+                    content = content[:-4]
+                    self.stdout.write(content)
+                    self.qthread.put(content)
 
-            else:
-                raise "unsupported command"
+                else:
+                    raise Exception("unsupported command")
+        except Exception as e:
+            self.qthread.put(e)
+
 
     def send(self, content):
         self.qmain.put({ 'command': 'send', 'content': content })
-        self.qthread.get()
+        res = self.qthread.get()
+        if type(res) is Exception:
+            raise res
 
     def recv(self, timeout):
         self.qmain.put({ 'command': 'recv' })
         content = self.qthread.get(timeout=timeout)
+        if type(content) is Exception:
+            raise content
         return content
 
     def exit(self):
