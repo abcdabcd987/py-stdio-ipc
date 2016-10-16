@@ -6,7 +6,6 @@ from threading import Thread
 from subprocess import Popen, PIPE
 import os
 import resource
-import traceback
 
 def setrlimit():
     m = 384 * 1024 * 1024
@@ -52,7 +51,6 @@ class ChildProcess():
                 else:
                     raise Exception("unsupported command")
         except Exception as e:
-            traceback.print_exec()
             self.qthread.put(e)
 
 
