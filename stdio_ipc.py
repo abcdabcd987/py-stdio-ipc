@@ -71,5 +71,7 @@ class ChildProcess():
         self.qmain.put({ 'command': 'exit' })
         self.child.kill()
         self.thread.join()
+        self.stdin.close()
+        self.stdout.close()
         self.stderr.close()
 
