@@ -3,6 +3,8 @@ result.json
 sample_ai
 sample_ai_re
 sample_ai_tle
+sample_ai_stderr
+*.swp
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

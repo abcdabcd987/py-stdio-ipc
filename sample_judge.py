@@ -35,10 +35,8 @@ def finish(winner, err1, err2):
     # kill ai and write stdio log
     if type(ai1) is not dict:
         ai1.exit()
-        ai1.save_stdio('ai1_stdin.log', 'ai1_stdout.log', 'ai1_stderr.log')
     if type(ai2) is not dict:
         ai2.exit()
-        ai2.save_stdio('ai2_stdin.log', 'ai2_stdout.log', 'ai2_stderr.log')
 
     # write result
     result = {
@@ -55,9 +53,9 @@ def finish(winner, err1, err2):
     # exit
     sys.exit(0)
 
-def spawnAI(args):
+def spawnAI(args, save_stdin_path, save_stdout_path, save_stderr_path):
     try:
-        ai = ChildProcess(args)
+        ai = ChildProcess(args, save_stdin_path, save_stdout_path, save_stderr_path)
         return ai
     except:
         return { 'err': 'fail to spawn the program.' + str(sys.exc_info()[1]) }
@@ -73,8 +71,8 @@ if len(sys.argv) != 3:
 seed_base = int(time.time() * 1e3) % 10000000000
 id1 = seed_base % 2
 id2 = 1 - id1
-ai1 = spawnAI([sys.argv[1], '%.0f' % (seed_base+0)])
-ai2 = spawnAI([sys.argv[2], '%.0f' % (seed_base+1)])
+ai1 = spawnAI([sys.argv[1], '%.0f' % (seed_base+0)], 'ai1_stdin.log', 'ai1_stdout.log', 'ai1_stderr.log')
+ai2 = spawnAI([sys.argv[2], '%.0f' % (seed_base+1)], 'ai2_stdin.log', 'ai2_stdout.log', 'ai2_stderr.log')
 check_both(type(ai1) is not dict, type(ai2) is not dict, ai1, ai2)
 
 # send id
