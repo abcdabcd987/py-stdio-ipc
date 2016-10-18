@@ -31,6 +31,8 @@ class ChildProcess():
                     break
 
                 elif op['command'] == 'send':
+                    if self.child.poll() is not None:
+                        raise Exception('program unexpectedly terminated')
                     content = op['content']
                     self.child.stdin.write(content)
                     self.child.stdin.flush()

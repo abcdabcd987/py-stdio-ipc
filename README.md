@@ -10,6 +10,8 @@ Usage: `./sample_judge.py AI1Path AI2Path`
     $ clang++ -Wall sample_ai_tle.cc -o sample_ai_tle
     $ clang++ -Wall sample_ai_re.cc -o sample_ai_re
     $ clang++ -Wall sample_ai.cc -o sample_ai
+    $ clang++ -Wall bad1.cc -o bad1
+    $ clang++ -Wall bad2.cc -o bad2
       
     $ ./sample_judge.py ./sample_ai ./sample_ai
     {'ai1_err': '', 'ai1_id': 0, 'ai2_err': '', 'ai2_id': 1, 'winner': 2}
@@ -24,6 +26,16 @@ Usage: `./sample_judge.py AI1Path AI2Path`
     {'ai1_err': '',
      'ai1_id': 1,
      'ai2_err': "wrong format. your output: ''",
+     'ai2_id': 0,
+     'winner': 1}
+
+    $ ./sample_judge.py ./sample_ai ./bad1
+    {'ai1_err': '', 'ai1_id': 1, 'ai2_err': 'timeout', 'ai2_id': 0, 'winner': 1}
+
+    $ ./sample_judge.py ./sample_ai ./bad2
+    {'ai1_err': '',
+     'ai1_id': 1,
+     'ai2_err': 'fail to send id. program unexpectedly terminated',
      'ai2_id': 0,
      'winner': 1}
 

@@ -18,10 +18,16 @@ def action(ai):
     return { 'say': say, 'hand': hand }
 
 def message(ai, id, res):
-    ai.send('message\n%d %d %d\n' % (id, res['say'], res['hand']))
+    try:
+        ai.send('message\n%d %d %d\n' % (id, res['say'], res['hand']))
+    except:
+        return { 'err': 'fail to send message. ' + str(sys.exc_info()[1]) }
 
 def send_id(ai, id):
-    ai.send('id\n%d\n' % id)
+    try:
+        ai.send('id\n%d\n' % id)
+    except:
+        return { 'err': 'fail to send id. ' + str(sys.exc_info()[1]) }
 
 def check_both(ai1_success, ai2_success, res1, res2):
     if not ai1_success and not ai2_success:
@@ -76,8 +82,9 @@ ai2 = spawnAI([sys.argv[2], '%.0f' % (seed_base+1)], 'ai2_stdin.log', 'ai2_stdou
 check_both(type(ai1) is not dict, type(ai2) is not dict, ai1, ai2)
 
 # send id
-send_id(ai1, id1)
-send_id(ai2, id2)
+tmp1 = send_id(ai1, id1)
+tmp2 = send_id(ai2, id2)
+check_both(type(tmp1) is not dict, type(tmp2) is not dict, tmp1, tmp2)
 
 
 while True:
@@ -93,7 +100,9 @@ while True:
         finish(1 if ai1_correct else 2, '', '')
 
     # broadcast history
-    message(ai1, id1, res1)
-    message(ai1, id2, res2)
-    message(ai2, id1, res1)
-    message(ai2, id2, res2)
+    tmp1 = message(ai1, id1, res1)
+    tmp2 = message(ai2, id1, res1)
+    check_both(type(tmp1) is not dict, type(tmp2) is not dict, tmp1, tmp2)
+    tmp1 = message(ai1, id2, res2)
+    tmp2 = message(ai2, id2, res2)
+    check_both(type(tmp1) is not dict, type(tmp2) is not dict, tmp1, tmp2)

@@ -4,6 +4,8 @@ sample_ai
 sample_ai_re
 sample_ai_tle
 sample_ai_stderr
+bad1
+bad2
 *.swp
 
 # Byte-compiled / optimized / DLL files
